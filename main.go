@@ -23,6 +23,9 @@ func emailAllowedValidator(prefix string) options.ClaimsValidationFn[EmailClaims
 		allow_list.Insert(s)
 	}
 	return func(claims *EmailClaims) error {
+		if len(claims.Email) < 1 {
+			return fmt.Errorf("Token has no email claim.")
+		}
 		if allow_list.Has(claims.Email) {
 			return nil
 		} else {
